@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <!-- TensorFlow.js script -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.5.2/dist/tf.min.js"></script>
+        <script
+        src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+
+        <script src = "test.js" > </script>
+        <link rel="stylesheet" href="/assets/style.css">
+    </head>
+
+    <body>
+
+        <h1 align="center">Tomato Diseases Predictor</h1>      
+        <div class="container-fluid"> 
+        </div>
+
+        <div class="col" style ='margin-left:100px;'>
+            <h4 id ='status' ></h4>
+        </div>
+
+        <div style="100%">   
+            <output id="list" style="width:100%"></output>
+        </div>
+        <input type="file" id="files" name="files" accept=".jpg, .jpeg, .png"/>
+
+        <div style="margin-top:20px">
+            <button type="button" value="Submit" id="do-predict" onclick = "start()">Go Predict !!!</button>
+        </div>
+
+        <div>
+            <p>
+                <b id = "Result">Result : </b>
+            </p>
+            <span id="result-name"></span>            
+            <div class="loader"></div>
+           
+            <p>
+                <b id = "Probability">Probability : </b>
+            </p>
+            <span id="result-prob"></span>
+            <div class="loader"></div>
+        </div>
+ 
+    </body>
+</html>
+
+<script>   
+    
+    function handleFileSelect(evt) {
+        $("#list").html("");
+        var files = evt.target.files; // FileList object
+
+        // Loop through the FileList and render image files as thumbnails.
+        for (var i = 0, f; f = files[i]; i++) {
+
+            // Only process image files.
+            if (!f.type.match('image.*')) {
+            continue;
+            }
+
+            var reader = new FileReader();
+
+            // Closure to capture the file information.
+            reader.onload = (function(theFile) {
+            return function(e) {
+                // Render thumbnail.
+                var span = document.createElement('span');
+                span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                                '" title="', escape(theFile.name), '"/>'].join('');
+
+                document.getElementById('list').insertBefore(span, null);
+            };
+            })(f);
+
+            // Read in the image file as a data URL.
+            reader.readAsDataURL(f);
+        }
+    }
+    document.getElementById('files').addEventListener('change', handleFileSelect, false);
+    
+</script>
