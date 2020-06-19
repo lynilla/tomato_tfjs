@@ -23,7 +23,7 @@
         </div>
 
         <div style="100%">   
-            <output id="list" style="width:100%"></output>
+            <output id="list" style="width:100%" ></output>
         </div>
         <input type="file" id="files" name="files" accept=".jpg, .jpeg, .png"/>
 
@@ -69,7 +69,7 @@
             return function(e) {
                 // Render thumbnail.
                 var span = document.createElement('span');
-                span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                span.innerHTML = ['<img class="thumb" width="256px" height="256px" src="', e.target.result,
                                 '" title="', escape(theFile.name), '"/>'].join('');
 
                 document.getElementById('list').insertBefore(span, null);

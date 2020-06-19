@@ -67,15 +67,19 @@ function preprocess(img)
     //convert the image data to a tensor 
     let tensor = tf.browser.fromPixels(img)
     //resize to 50 X 50
-    const resized = tf.image.resizeBilinear(tensor, [256, 256]).toFloat()
+    const resized = tf.image.resizeBilinear(tensor, [256, 256]).expandDims(0).toFloat()
     // Normalize the image 
     const offset = tf.scalar(255.0);
-    const normalized = tf.scalar(1.0).sub(resized.div(offset));
+    const normalized = resized.div(offset);
     //We add a dimension to get a batch shape 
-    const batched = normalized.expandDims(0)
+    // batched = resized / 255
+    // const batched2 = normalized.expandDims(0)
 
+
+    console.log(normalized.print())
+    console.log(normalized.shape)
     console.log("================Preprocessing End=====================");
-    return batched
+    return normalized
 
 }
 /*
@@ -117,11 +121,15 @@ async function start(){
 
     status.innerHTML = 'Loading Model .....'
     
-    model = await tf.loadGraphModel('http://localhost:8080/model/model.json')
+    tf.ENV.set("WEBGL_PACK", false);
+
+    model = await tf.loadLayersModel('http://localhost:8080/model/model.json')
     
+    // console.log(model.getWeights()[0].print())
     status.innerHTML = 'Model Loaded'     
 
     img = document.getElementById('list').firstElementChild.firstElementChild;
+    console.log(img)
         
 	//load the class names
     await loadDict()
